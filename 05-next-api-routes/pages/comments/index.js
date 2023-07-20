@@ -25,6 +25,16 @@ const CommentsPage = () => {
     setComment("");
   };
 
+  const deleteComment = async (commentId) => {
+    const response = await fetch(`/api/comments/${commentId}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+    console.log(data);
+    fetchComments();
+  };
+
   return (
     <>
       <input
@@ -35,7 +45,12 @@ const CommentsPage = () => {
       <button onClick={submitComment}>Submit comment</button>
       <button onClick={fetchComments}>Load comments</button>
       {comments.map((comment) => {
-        return <div key={comment.id}>{comment.text}</div>;
+        return (
+          <div key={comment.id}>
+            {comment.text}
+            <button onClick={() => deleteComment(comment.id)}>Delete</button>
+          </div>
+        );
       })}
     </>
   );
