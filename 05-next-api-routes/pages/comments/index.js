@@ -3,6 +3,8 @@ import { useState } from "react";
 const CommentsPage = () => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedText, setEditedText] = useState("");
 
   const fetchComments = async () => {
     const response = await fetch("/api/comments");
@@ -13,8 +15,7 @@ const CommentsPage = () => {
   const submitComment = async () => {
     const response = await fetch("/api/comments", {
       method: "POST",
-      //   body: JSON.stringify({ text: comment }),
-      body: JSON.stringify({ comment }),
+      body: JSON.stringify({ text: comment }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -35,6 +36,31 @@ const CommentsPage = () => {
     fetchComments();
   };
 
+  const startEditComment = (commentId, initialText) => {
+    setEditingCommentId(commentId);
+    setEditedText(initialText);
+  };
+
+  const cancelEditComment = () => {
+    setEditingCommentId(null);
+    setEditedText("");
+  };
+
+  const saveEditedComment = async (commentId) => {
+    const response = await fetch(`/api/comments/${commentId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ text: editedText }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+    setEditingCommentId(null);
+    fetchComments();
+  };
+
   return (
     <>
       <input
@@ -47,8 +73,31 @@ const CommentsPage = () => {
       {comments.map((comment) => {
         return (
           <div key={comment.id}>
-            {comment.text}
-            <button onClick={() => deleteComment(comment.id)}>Delete</button>
+            {editingCommentId === comment.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                />
+                <button onClick={() => saveEditedComment(comment.id)}>
+                  Save
+                </button>
+                <button onClick={cancelEditComment}>Cancel</button>
+              </>
+            ) : (
+              <>
+                {comment.text}
+                <button
+                  onClick={() => startEditComment(comment.id, comment.text)}
+                >
+                  Edit
+                </button>
+                <button onClick={() => deleteComment(comment.id)}>
+                  Delete
+                </button>
+              </>
+            )}
           </div>
         );
       })}

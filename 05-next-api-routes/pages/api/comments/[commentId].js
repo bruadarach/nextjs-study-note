@@ -20,5 +20,12 @@ export default function handler(req, res) {
 
     // send back the deleted comment
     res.status(200).json(deleteComment);
+  } else if (req.method === "PATCH") {
+    const { text } = req.body;
+    const comment = comments.find(
+      (comment) => comment.id === parseInt(commentId)
+    );
+    comment.text = text;
+    res.status(200).json(comment);
   }
 }
