@@ -1,0 +1,7 @@
+// redefine .highlight class, using color variable
+
+@import "colors";
+
+.highlightscss {
+  color: $pink;
+}
