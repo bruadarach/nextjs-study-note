@@ -1,0 +1,23 @@
+.layout-header {
+  background: navy;
+  color: lightpink;
+  font-size: 30px;
+  text-align: center;
+  padding: 30px;
+}
+
+.layout-footer {
+  background: green;
+  color: lightgoldenrodyellow;
+  font-size: 30px;
+  text-align: center;
+  padding: 30px;
+}
+
+.content {
+  background: lightblue;
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  padding: 30px;
+}
