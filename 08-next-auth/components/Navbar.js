@@ -2,55 +2,49 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 function Navbar() {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+
   return (
     <nav className="header">
       <h1 className="logo">
         <a href="#">NextAuth</a>
       </h1>
-      <ul className={`main-nav ${!session && loading ? "loading" : "loaded"}`}>
+      <ul className={`main-nav ${loading ? "loading" : "loaded"}`}>
         <li>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/dashboard">
-            <a>Dashboard</a>
-          </Link>
+          <Link href="/dashboard">Dashboard</Link>
         </li>
         <li>
-          <Link href="/blog">
-            <a>Blog</a>
-          </Link>
+          <Link href="/blog">Blog</Link>
         </li>
 
-        {!loading && !session && (
+        {/* In the new grammar, no need to check loading and session, just check session */}
+        {session ? (
           <li>
-            <Link href="/api/auth/signin">
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  signIn("github");
-                }}
-              >
-                Sign In
-              </a>
-            </Link>
+            <a
+              href="/api/auth/signout"
+              onClick={(e) => {
+                e.preventDefault();
+                signOut();
+              }}
+            >
+              Sign Out
+            </a>
           </li>
-        )}
-        {session && (
+        ) : (
           <li>
-            <Link href="/api/auth/signout">
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  signOut();
-                }}
-              >
-                Sign Out
-              </a>
-            </Link>
+            <a
+              href="/api/auth/signin"
+              onClick={(e) => {
+                e.preventDefault();
+                signIn("github");
+              }}
+            >
+              Sign In
+            </a>
           </li>
         )}
       </ul>
