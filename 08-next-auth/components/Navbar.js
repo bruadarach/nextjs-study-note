@@ -10,7 +10,7 @@ function Navbar() {
       <h1 className="logo">
         <a href="#">NextAuth</a>
       </h1>
-      <ul className={`main-nav ${loading ? "loading" : "loaded"}`}>
+      <ul className={`main-nav ${!session && loading ? "loading" : "loaded"}`}>
         <li>
           <Link href="/">Home</Link>
         </li>
@@ -20,9 +20,21 @@ function Navbar() {
         <li>
           <Link href="/blog">Blog</Link>
         </li>
-
-        {/* In the new grammar, no need to check loading and session, just check session */}
-        {session ? (
+        {!loading && !session && (
+          <li>
+            <a
+              href="/api/auth/signin"
+              onClick={(e) => {
+                e.preventDefault();
+                signIn();
+                // signIn("github");
+              }}
+            >
+              Sign In
+            </a>
+          </li>
+        )}
+        {session && (
           <li>
             <a
               href="/api/auth/signout"
@@ -32,18 +44,6 @@ function Navbar() {
               }}
             >
               Sign Out
-            </a>
-          </li>
-        ) : (
-          <li>
-            <a
-              href="/api/auth/signin"
-              onClick={(e) => {
-                e.preventDefault();
-                signIn("github");
-              }}
-            >
-              Sign In
             </a>
           </li>
         )}
