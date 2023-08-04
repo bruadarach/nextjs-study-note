@@ -11,6 +11,7 @@ function Navbar() {
         <a href="#">NextAuth</a>
       </h1>
       <ul className={`main-nav ${!session && loading ? "loading" : "loaded"}`}>
+        {/* <ul className="main-nav"> */}
         <li>
           <Link href="/">Home</Link>
         </li>
