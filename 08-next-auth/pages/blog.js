@@ -17,6 +17,20 @@ export async function getServerSideProps(context) {
   //   },
   //   expires: '2023-09-03T15:44:52.199Z'
   // } session
+
+  // how to secure the page
+  // only if user is not logged in
+  // if session doesn't exist
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin?callbackUrl=http://localhost:3000/blog",
+        permanent: false,
+      },
+    };
+  }
+  // if user is logged in
+  // if session exists
   return {
     props: {
       data: session ? "List of 100 personalized blogs" : "List of free blogs",
