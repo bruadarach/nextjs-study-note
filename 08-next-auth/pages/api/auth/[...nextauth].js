@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "../../../lib/mongodb";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -9,16 +11,8 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
-  database: process.env.DB_URL,
-  // next-auth will automatically track session state in a database
-  session: {
-    // use jwt for session management, instead of database
-    jwt: true,
-  },
-  jwt: {
-    // use a secret to sign and encrypt the JWT
-    secret: process.env.JWT_SECRET,
-  },
+  adapter: MongoDBAdapter(clientPromise), // MongoDB 어댑터
+  secret: process.env.JWT_SECRET, // JWT를 위한 비밀 키
 };
 
 export default NextAuth(authOptions);
