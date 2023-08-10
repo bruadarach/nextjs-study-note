@@ -25,7 +25,8 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         destination:
-          "/api/auth/signin?callbackUrl=https://nextauth-deploy.vercel.app/blog",
+          // "/api/auth/signin?callbackUrl=https://nextauth-deploy.vercel.app/blog",
+          "/login",
         permanent: false,
       },
     };
