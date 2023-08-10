@@ -2,14 +2,6 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "../../../lib/mongodb";
-import { getToken } from "next-auth/jwt";
-import { getToken } from "next-auth/jwt";
-
-// 토큰을 가져오는 함수
-const getTokenForUser = async () => {
-  const token = await getToken({ req, secret: process.env.JWT_SECRET });
-  return token;
-};
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -22,15 +14,21 @@ export const authOptions = {
   adapter: MongoDBAdapter(clientPromise), // MongoDB 어댑터
   secret: process.env.JWT_SECRET, // JWT를 위한 비밀 키
 
+  session: {
+    strategy: "jwt",
+  },
+
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.accessToken = user.accessToken;
-        token.id = user.id;
+    async jwt({ token, account, profile }) {
+      // Persist the OAuth access_token and or the user id to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = profile.id;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
+      // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken;
       session.user.id = token.id;
       return session;
