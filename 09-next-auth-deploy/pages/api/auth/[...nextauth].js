@@ -12,7 +12,7 @@ export const authOptions = {
     }),
   ],
   adapter: MongoDBAdapter(clientPromise), // MongoDB 어댑터
-  secret: process.env.JWT_SECRET, // JWT를 위한 비밀 키
+  secret: process.env.NEXTAUTH_SECRET, // JWT를 위한 비밀 키
 
   session: {
     strategy: "jwt",
