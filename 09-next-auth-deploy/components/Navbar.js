@@ -27,8 +27,10 @@ function Navbar() {
               href="/api/auth/signin"
               onClick={(e) => {
                 e.preventDefault();
-                signIn();
-                // signIn("github");
+                // signIn();
+                signIn("github", {
+                  callbackUrl: NEXTAUTH_URL,
+                });
               }}
             >
               Sign In
