@@ -24,7 +24,8 @@ export async function getServerSideProps(context) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin?callbackUrl=http://localhost:3000/blog",
+        destination:
+          "/api/auth/signin?callbackUrl=https://nextauth-deploy-al5c6of2t-bruadarach.vercel.app/blog",
         permanent: false,
       },
     };
